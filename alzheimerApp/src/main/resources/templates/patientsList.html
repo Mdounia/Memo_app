@@ -124,7 +124,26 @@
                                   <td>
                                       <a class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
                                       <a class="btn btn-primary btn-xs" th:href="@{/showFormForUpdate/{id}(id=${patient.id})}"><i class="fa fa-pencil"></i></a>
-                                      <a th:href="@{/deletePatient/{id}(id=${patient.id})}"  class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                      <a data-toggle="modal" data-target="#modal-warning" th:attr="data-target='#modal-warning'+${patient.id }" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                      <div class="modal modal-warning fade in" th:id="modal-warning+${patient.id }" >
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header" style="background-color: #d9534f;">
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">×</span></button>
+													<h4 class="modal-title">Warning !!! </h4>
+												</div>
+												<div class="modal-body">
+													<h3>Are you sure want to delete <span th:text="${patient.fullName}" ></span> ?</h3>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+													<a type="button" class="btn btn-danger" th:href="@{/deletePatient/{id}(id=${patient.id})}"><i
+															class="fa fa-check"></i>Delete Patient</a>
+												</div>
+											</div>
+										</div>
+									</div>									
                                   </td>
                               </tr>
 							</tbody>
