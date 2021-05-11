@@ -24,6 +24,22 @@ public class PatientServiceImpl implements PatientService {
 	public List<Patient> getAllPatients() {
 		return this.patientRepository.findAll();
 	}
+	@Override
+	public Patient getPatientById(long id) {
+		Optional<Patient> optional=patientRepository.findById(id);
+		Patient patient =null;
+		if(optional.isPresent()) {
+			patient = optional.get();
+		}else {
+			throw new RuntimeException("Patient not found for id :: "+ id);
+		}
+		return patient;
+	}
+	@Override
+	public void detelePatientById(long id) {
+		this.patientRepository.deleteById(id);
+		
+	}
 
 
 

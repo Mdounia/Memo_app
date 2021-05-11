@@ -123,8 +123,8 @@
                                   <td th:text="${patient.phoneNumber}"></td>
                                   <td>
                                       <a class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
-                                      <a class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
-                                      <a class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                      <a class="btn btn-primary btn-xs" th:href="@{/showFormForUpdate/{id}(id=${patient.id})}"><i class="fa fa-pencil"></i></a>
+                                      <a th:href="@{/deletePatient/{id}(id=${patient.id})}"  class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
                                   </td>
                               </tr>
 							</tbody>
@@ -132,6 +132,7 @@
                       </div><!-- /content-panel -->
                   </div><!-- /col-md-12 -->
               </div><!-- /row -->
+                      
               <br>
               <a th:href="@{/patientForm}" class="btn btn-info btn-sm mb-3"> Add Patient</a>			
 
