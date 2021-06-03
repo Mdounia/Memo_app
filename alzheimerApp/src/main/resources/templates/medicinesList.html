@@ -12,13 +12,13 @@
 	<title>Memo </title>
 
 	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link href="../static/css/bootstrap.css" th:href="@{css/bootstrap.css}" rel="stylesheet">
 	<!--external css-->
 	<link href="../static/font-awesome/css/font-awesome.css" th:href="@{font-awesome/css/font-awesome.css}"
 		rel="stylesheet" />
 
 	<!-- Custom styles for this template -->
-	<link href="../static/css/custom.css" th:href="@{css/custom.css}" rel="stylesheet">
 	<link href="../static/css/style.css" th:href="@{css/style.css}" rel="stylesheet">
 	<link href="../static/css/style-responsive.css" th:href="@{css/style-responsive.css}" rel="stylesheet">
 
@@ -26,7 +26,6 @@
 	<!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-      
     <![endif]-->
 </head>
 
@@ -50,10 +49,14 @@
 				
 							<p class="centered"><a href="/"><img th:src="@{img/ui-sam.jpg}" class="img-circle" width="60"></a>
 							</p>
-							<h5 class="centered">Marcel Newman</h5>
+					<h5 class="centered"><div sec:authorize="isAuthenticated()">
+						<span sec:authentication="name">Username</span>
+						<br>
+						<span sec:authentication="principal.authorities">Roles</span>
+					</div></h5>
 				
 							<li class="mt">
-								<a href="home" onclick="clickSingleA(this)">
+								<a href="/" onclick="clickSingleA(this)">
 									<i class="fa fa-dashboard"></i>
 									<span>Dashboard</span>
 								</a>
@@ -61,7 +64,7 @@
 				
 				
 							<li class="sub-menu">
-								<a href="patientList" onclick="clickSingleA(this)" class="active">
+								<a href="patientList" onclick="clickSingleA(this)" >
 									<i class="fa fa-cogs"></i>
 									<span> Patients Management</span>
 								</a>
@@ -73,7 +76,7 @@
 								</a>
 							</li>
 							<li class="sub-menu">
-								<a href="medicinesList" onclick="clickSingleA(this)">
+								<a href="medicinesList" onclick="clickSingleA(this)" class="active">
 									<i class="fa fa-cogs"></i>
 									<span> Medicine Management</span>
 								</a>
@@ -98,51 +101,78 @@
 		<!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
-			<!--main content start-->
-			<section id="main-content">
-				<section class="wrapper">
-					<h3><i class="fa fa-angle-right"></i> Add new pateint</h3>
-			
-					<!-- BASIC FORM ELELEMNTS -->
-					<div class="row mt">
-						<div class="col-lg-12">
-							<div class="form-panel">
-								<form class="form-horizontal style-form" action="#" th:action="@{/savePatient}" th:object="${pat}" method="POST">
-									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">First name</label>
-										<div class="col-sm-10">
-											<input  class="form-control" th:field="*{firstName}" placeholder="First name" required autofocus="autofocus" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">Last name</label>
-										<div class="col-sm-10">
-											<input  class="form-control" th:field="*{lastName}" placeholder="First name" required autofocus="autofocus" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">Email</label>
-										<div class="col-sm-10">
-											<input type="email" th:field="*{email}" placeholder="Patient email" class="form-control" required>
-										</div>
+ <!--main content start-->
+      <section id="main-content">
+          <section class="wrapper">
+          	<h3> Medicine Management system </h3>	
+              <div class="row mt">																						
+                  <div class="col-md-12">
+                      <div class="content-panel">
+                          <table class="table ">
+                              <thead>
+                              <tr>
+                              <th><i class="fa fa-image"></i> Id</th>
+                              <th ><i class="fa fa-pills"></i> Name</th>
+                              	<th ><i class="fa fa-info"></i> Description</th>
+                              	<th ><i class="fa fa-clock"></i> Time</th>
+                              	<th><i class="fa fa-prescription-bottle"></i> Dose</th>
+                              	<th><i class="fa fa-pills"></i> Mode d'application</th>
+                              	<th><i class="fa fa-user"></i> Patient</th>
+                                  <th><i class=" fa fa-edit"></i> Actions</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr th:each="med : ${listMedicine}">
+                              	<td th:text="${med.id}" ></td>
+                              	<td th:text="${med.name}" ></td>
+                              	<td th:text="${med.description}" ></td>
+                                <td th:text="${med.time}" ></td>   
+								<td th:text="${med.dose}" ></td>
+								<td th:text="${med.support}" ></td>	                                 
+                                 <td th:text="${med.user.firstname}" ><a href="#"></a></td>
+                                  <td>
+                                      <a class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
+                                      <a class="btn btn-primary btn-xs" th:href="@{/updateMedicine/{id}(id=${med.id})}"><i class="fa fa-pencil"></i></a>
+                                      <a data-toggle="modal" data-target="#modal-warning" th:attr="data-target='#modal-warning'+${med.id }" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                      <div class="modal modal-warning fade in" th:id="modal-warning+${med.id }" >
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header" style="background-color: #d9534f;">
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">×</span></button>
+													<h4 class="modal-title">Warning !!! </h4>
+												</div>
+												<div class="modal-body">
+													<h3>Are you sure want to delete <span th:text="${med.name}" ></span> ?</h3>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+													<a type="button" class="btn btn-danger" th:href="@{/deleteMedicine/{id}(id=${med.id})}"><i
+															class="fa fa-check"></i>Delete Medicine</a>
+												</div>
+											</div>
+										</div>	
 									</div>	
-									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">Password</label>
-										<div class="col-sm-10">
-											<input type="password" th:field="*{password}" placeholder="Patient password" class="form-control"required>
-										</div>
-									</div>												
-									<button type="submit" class="btn btn-info col-2"> Save Patient</button>																	
-								</form>
-							</div>
-						</div><!-- col-lg-12-->
-					</div><!-- /row -->
+																	
+                                  </td>
 
-				</section>
-				<! --/wrapper -->
-			</section><!-- /MAIN CONTENT -->
-			
-			<!--main content end-->
+                                  
+                              </tr>
+							</tbody>
+                          </table>
+                      </div><!-- /content-panel -->
+                  </div><!-- /col-md-12 -->
+              </div><!-- /row -->
+                      
+              <br>
+              <a th:href="@{/medicineForm}" class="btn btn-info btn-sm mb-3"> Add Medicine</a>			
+
+		</section><! --/wrapper -->
+      </section><!-- /MAIN CONTENT -->
+		<!--footer start-->
+		<div th:insert="fragments :: footer"></div>
+		<!--footer end-->
+	</section>
 
 	<!-- js placed at the end of the document so the pages load faster -->
 	<script th:src="@{js/jquery.js}"></script>
@@ -156,16 +186,10 @@
 	<script th:src="@{js/common-scripts.js}"></script>
 
 	<!--script for this page-->
-	<script th:src="@{js/jquery-ui-1.9.2.custom.min.js}"></script>
 
-	<script>
-		//custom select box
 
-		$(function () {
-			$('select.styled').customSelect();
-		});
 
-	</script>
 
 </body>
+
 </html>

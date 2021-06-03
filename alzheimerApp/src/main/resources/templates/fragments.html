@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 	<!--header start-->
 	<div th:fragment="navbar">
@@ -155,8 +155,8 @@
 				<!--  notification end -->
 			</div>
 			<div class="top-menu">
-				<ul class="nav pull-right top-menu">
-					<li><a class="logout" href="/">Logout</a></li>
+				<ul class="nav pull-right top-menu">				
+					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
 				</ul>
 			</div>
 		</header>

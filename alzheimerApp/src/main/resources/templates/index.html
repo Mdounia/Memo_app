@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head lang="en">
 	<meta charset="utf-8">
@@ -48,56 +48,65 @@
       MAIN SIDEBAR MENU
       *********************************************************************************************************************************************************** -->
 		<!--sidebar start-->
-				<aside>
+
+		<aside>
 			<div id="sidebar" class="nav-collapse ">
 				<!-- sidebar menu start-->
 				<ul class="sidebar-menu" id="nav-accordion">
 
 					<p class="centered"><a href="/"><img th:src="@{img/ui-sam.jpg}" class="img-circle" width="60"></a>
 					</p>
-					<h5 class="centered">Marcel Newman</h5>
+					<h5 class="centered">
+						<div sec:authorize="isAuthenticated()">
+							<span sec:authentication="name">Username</span>
+							<br>
+							<span sec:authentication="principal.authorities">Roles</span>
+						</div>
+					</h5>
+					<div sec:authorize="hasAuthority('Tutor')">
 
-					<li class="mt">
-						<a  href="home"  class="active">
-							<i class="fa fa-dashboard"></i>
-							<span>Dashboard</span>
-						</a>
-					</li>
+						<li class="mt">
+							<a href="/" class="active">
+								<i class="fa fa-dashboard"></i>
+								<span>Dashboard</span>
+							</a>
+						</li>
 
 
-					<li class="sub-menu">
-						<a href="patientList"  >
-							<i class="fa fa-cogs"></i>
-							<span> Patients Management</span>
-						</a>
-					</li>
-					<li class="sub-menu">
-						<a href="patientList"  >
-							<i class="fa fa-cogs"></i>
-							<span> Tasks Management</span>
-						</a>
-					</li>	
-					<li class="sub-menu">
-						<a href="patientList"  >
-							<i class="fa fa-cogs"></i>
-							<span> Medicine Management</span>
-						</a>
-					</li>									
-					<li class="sub-menu">
-						<a href="javascript:;">
-							<i class=" fa fa-bar-chart-o"></i>
-							<span>Charts</span>
-						</a>
-						<ul class="sub">
-							<li><a href="morris.html">Morris</a></li>
-							<li><a href="chartjs.html">Chartjs</a></li>
-						</ul>
-					</li>
-
+						<li class="sub-menu">
+							<a href="patientList">
+								<i class="fa fa-cogs"></i>
+								<span> Patients Management</span>
+							</a>
+						</li>
+						<li class="sub-menu">
+							<a href="tasksList">
+								<i class="fa fa-cogs"></i>
+								<span> Tasks Management</span>
+							</a>
+						</li>
+						<li class="sub-menu">
+							<a href="medicinesList">
+								<i class="fa fa-cogs"></i>
+								<span> Medicine Management</span>
+							</a>
+						</li>
+						<li class="sub-menu">
+							<a href="javascript:;">
+								<i class=" fa fa-bar-chart-o"></i>
+								<span>Charts</span>
+							</a>
+							<ul class="sub">
+								<li><a href="morris.html">Morris</a></li>
+								<li><a href="chartjs.html">Chartjs</a></li>
+							</ul>
+						</li>
+					</div>
 				</ul>
 				<!-- sidebar menu end-->
-			</div>
+
 		</aside>
+		</div>
 		<!--sidebar end-->
 
 		<!-- **********************************************************************************************************************************************************
@@ -111,6 +120,130 @@
 					<div class="col-lg-9 main-chart">
 
 						<div class="row mtbox">
+							<table class="table table-bordered " style="margin-left: 120px;">
+								<div sec:authorize="hasAuthority('Tutor')">
+									<thead>
+										<tr>
+											<th><i class="fa fa-image"></i> Id</th>
+											<th><i class="fa fa-info"></i> Description</th>
+											<th><i class="fa fa-star"></i> Status</th>
+											<th><i class="fa fa-calendar-week"></i> End date</th>
+											<th><i class="fa fa-user"></i> Patient</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="task : ${listTask}">
+											<td th:text="${task.id}"></td>
+											<td th:text="${task.description}"></td>
+											<div th:if="${task.status} =='Urgent'">
+												<td class="w3-tag w3-padding w3-round-large w3-red w3-center"
+													th:text="${task.status}">
+													<a href="#"></a></td>
+											</div>
+											<div th:if="${task.status} =='Cool'">
+												<td class="w3-tag w3-padding w3-round-large w3-green w3-center"
+													th:text="${task.status}"><a href="#"></a></td>
+											</div>
+											<td th:text="${task.date}"><a href="#"></a></td>
+											<td th:text="${task.user.firstname}"><a href="#"></a></td>
+										</tr>
+									</tbody>
+								</div>
+								<div sec:authorize="hasAuthority('Patient')">
+								<h3 style="margin-left: 120px;">Your tasks for today</h3>
+									<thead>
+										<tr>
+											<th><i class="fa fa-image"></i> Id</th>
+											<th><i class="fa fa-info"></i> Description</th>
+											<th><i class="fa fa-star"></i> Status</th>
+											<th><i class="fa fa-calendar-week"></i> End date</th>
+											<th><i class="fa fa-user"></i> Patient</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<tr th:each="task : ${listTask}">
+											<div th:if="${task.user.email == user} ">
+												<td th:text="${task.id}"></td>
+												<td th:text="${task.description}"></td>
+												<div th:if="${task.status} =='Urgent'">
+													<td class="w3-tag w3-padding w3-round-large w3-red w3-center"
+														th:text="${task.status}"><a href="#"></a></td>
+												</div>
+												<div th:if="${task.status} =='Cool'">
+													<td class="w3-tag w3-padding w3-round-large w3-green w3-center"
+														th:text="${task.status}"><a href="#"></a></td>
+												</div>
+												<td th:text="${task.date}"><a href="#"></a></td>
+												<td th:text="${task.user.firstname}"><a href="#"></a></td>
+											</div>
+										</tr>
+									</tbody>
+								</div>
+							</table>
+
+
+						</div><!-- /row mt -->
+
+						<div class="row mtbox">
+						
+							<table class="table table-bordered " style="margin-left: 120px;">
+							<div sec:authorize="hasAuthority('Tutor')">
+								<thead>
+									<tr>
+										<th><i class="fa fa-image"></i> Id</th>
+										<th><i class="fa fa-pills"></i> Name</th>
+										<th><i class="fa fa-info"></i> Description</th>
+										<th><i class="fa fa-clock"></i> Time</th>
+										<th><i class="fa fa-prescription-bottle"></i> Dose</th>
+										<th><i class="fa fa-pills"></i> Mode d'application</th>
+										<th><i class="fa fa-user"></i> Patient</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="med : ${listMed}">
+										<td th:text="${med.id}"></td>
+										<td th:text="${med.name}"></td>
+										<td th:text="${med.description}"></td>
+										<td th:text="${med.time}"></td>
+										<td th:text="${med.dose}"></td>
+										<td th:text="${med.support}"></td>
+										<td th:text="${med.user.firstname}"><a href="#"></a></td>
+
+
+
+									</tr>
+								</tbody>
+							</div>
+							<div sec:authorize="hasAuthority('Patient')">
+							<h3 style="margin-left: 120px;">Your medicine for today</h3>
+								<thead>
+									<tr>
+										<th><i class="fa fa-image"></i> Id</th>
+										<th><i class="fa fa-pills"></i> Name</th>
+										<th><i class="fa fa-info"></i> Description</th>
+										<th><i class="fa fa-clock"></i> Time</th>
+										<th><i class="fa fa-prescription-bottle"></i> Dose</th>
+										<th><i class="fa fa-pills"></i> Mode d'application</th>
+										<th><i class="fa fa-user"></i> Patient</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="med : ${listMed}">
+									<div th:if="${med.user.email == user} ">
+										<td th:text="${med.id}"></td>
+										<td th:text="${med.name}"></td>
+										<td th:text="${med.description}"></td>
+										<td th:text="${med.time}"></td>
+										<td th:text="${med.dose}"></td>
+										<td th:text="${med.support}"></td>
+										<td th:text="${med.user.firstname}"><a href="#"></a></td>
+
+									</div>
+									</tr>
+								</tbody>
+							</div>							
+							</table>
 
 
 						</div><!-- /row mt -->
@@ -118,9 +251,12 @@
 
 						<div class="row mt">
 
-							<div class="col-md-4 col-sm-4 mb">
+							<div class="col-md-4 mb">
+
 
 							</div><!-- /col-md-4-->
+
+
 
 
 							<div class="col-md-4 mb">

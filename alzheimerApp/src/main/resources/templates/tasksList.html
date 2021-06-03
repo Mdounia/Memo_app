@@ -12,6 +12,7 @@
 	<title>Memo </title>
 
 	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link href="../static/css/bootstrap.css" th:href="@{css/bootstrap.css}" rel="stylesheet">
 	<!--external css-->
 	<link href="../static/font-awesome/css/font-awesome.css" th:href="@{font-awesome/css/font-awesome.css}"
@@ -63,13 +64,13 @@
 				
 				
 							<li class="sub-menu">
-								<a href="patientList" onclick="clickSingleA(this)" class="active">
+								<a href="patientList" onclick="clickSingleA(this)" >
 									<i class="fa fa-cogs"></i>
 									<span> Patients Management</span>
 								</a>
 							</li>
 							<li class="sub-menu">
-								<a href="tasksList" onclick="clickSingleA(this)">
+								<a href="tasksList" onclick="clickSingleA(this)" class="active">
 									<i class="fa fa-cogs"></i>
 									<span> Tasks Management</span>
 								</a>
@@ -103,33 +104,38 @@
  <!--main content start-->
       <section id="main-content">
           <section class="wrapper">
-          	<h3> Patient Management system </h3>	
+          	<h3> Task Management system </h3>	
               <div class="row mt">																						
                   <div class="col-md-12">
                       <div class="content-panel">
-                          <table class="table table-striped table-advance table-hover">
+                          <table class="table ">
                               <thead>
                               <tr>
                               <th><i class="fa fa-image"></i> Id</th>
-                              	<th ><i class="fa fa-user"></i> First name</th>
-                              	<th ><i class="fa fa-user"></i> Last name</th>
-                              	<th><i class="fa fa-envelope"></i> Email</th>
+                              	<th ><i class="fa fa-info"></i> Description</th>
+                              	<th ><i class="fa fa-star"></i> Status</th>
+                              	<th><i class="fa fa-calendar-week"></i> End date</th>
+                              	<th><i class="fa fa-user"></i> Patient</th>
                                   <th><i class=" fa fa-edit"></i> Actions</th>
                               </tr>
                               </thead>
                               <tbody>
-                              <tr th:each="patient : ${listPatient}">
-                              <div th:if="${patient.id } !=1" >
-                              	<td th:text="${patient.id}" ></td>
-                                  <td th:text="${patient.firstname}" ></td>
-                                  <td th:text="${patient.lastname}" ><a href="#"></a></td>
-                                  <td th:text="${patient.email}" class="hidden-phone"></td>
-                                  
+                              <tr th:each="task : ${listTask}">
+                              	<td th:text="${task.id}" ></td>
+                                  <td th:text="${task.description}" ></td>   
+                                    <div th:if="${task.status} =='Urgent'">
+                                  <td class="w3-tag w3-padding w3-round-large w3-red w3-center"  th:text="${task.status}" ><a href="#"></a></td>
+                                  </div>
+                                    <div th:if="${task.status} =='Cool'">
+                                  <td class="w3-tag w3-padding w3-round-large w3-green w3-center"   th:text="${task.status}" ><a href="#"></a></td>
+                                  </div>                                 
+                                  <td th:text="${task.date}" ><a href="#"></a></td>
+                                 <td th:text="${task.user.firstname}" ><a href="#"></a></td>
                                   <td>
                                       <a class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
-                                      <a class="btn btn-primary btn-xs" th:href="@{/showFormForUpdate/{id}(id=${patient.id})}"><i class="fa fa-pencil"></i></a>
-                                      <a data-toggle="modal" data-target="#modal-warning" th:attr="data-target='#modal-warning'+${patient.id }" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
-                                      <div class="modal modal-warning fade in" th:id="modal-warning+${patient.id }" >
+                                      <a class="btn btn-primary btn-xs" th:href="@{/Update/{id}(id=${task.id})}"><i class="fa fa-pencil"></i></a>
+                                      <a data-toggle="modal" data-target="#modal-warning" th:attr="data-target='#modal-warning'+${task.id }" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                      <div class="modal modal-warning fade in" th:id="modal-warning+${task.id }" >
 										<div class="modal-dialog">
 											<div class="modal-content">
 												<div class="modal-header" style="background-color: #d9534f;">
@@ -138,18 +144,20 @@
 													<h4 class="modal-title">Warning !!! </h4>
 												</div>
 												<div class="modal-body">
-													<h3>Are you sure want to delete <span th:text="${patient.firstname}" ></span> ?</h3>
+													<h3>Are you sure want to delete <span th:text="${task.description}" ></span> ?</h3>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
-													<a type="button" class="btn btn-danger" th:href="@{/deletePatient/{id}(id=${patient.id})}"><i
-															class="fa fa-check"></i>Delete Patient</a>
+													<a type="button" class="btn btn-danger" th:href="@{/deleteTask/{id}(id=${task.id})}"><i
+															class="fa fa-check"></i>Delete Task</a>
 												</div>
 											</div>
-										</div>
-									</div>									
+										</div>	
+									</div>	
+																	
                                   </td>
-                                  </div>
+
+                                  
                               </tr>
 							</tbody>
                           </table>
@@ -158,7 +166,7 @@
               </div><!-- /row -->
                       
               <br>
-              <a th:href="@{/patientForm}" class="btn btn-info btn-sm mb-3"> Add Patient</a>			
+              <a th:href="@{/taskForm}" class="btn btn-info btn-sm mb-3"> Add Task</a>			
 
 		</section><! --/wrapper -->
       </section><!-- /MAIN CONTENT -->

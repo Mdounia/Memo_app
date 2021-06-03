@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Update</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<body class="center">
+	<div class="container">
+		<h1>Medicine management </h1>
+		<hr>
+		<h2>Update Medicine</h2>
+
+		<form class="form-horizontal style-form" action="#" th:action="@{/saveMedicine}" th:object="${medUpd}"
+			method="POST">
+			<input type="hidden" th:field="*{id}" />
+			<div class="form-group">
+				<label class="col-sm-2 col-sm-2 control-label">Name</label>
+				<div class="col-sm-10">
+					<input class="form-control" th:field="*{name}" placeholder="Name" required autofocus="autofocus" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 col-sm-2 control-label">Description</label>
+				<div class="col-sm-10">
+					<input class="form-control" th:field="*{description}" placeholder="Description" required
+						autofocus="autofocus" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 col-sm-2 control-label">Time</label>
+				<div class="col-sm-10">
+					<input type="time" class="form-control" th:field="*{time}" placeholder="Time" required
+						autofocus="autofocus" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 col-sm-2 control-label">Dose</label>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" th:field="*{dose}" placeholder="Dose" required
+						autofocus="autofocus" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 col-sm-2 control-label">Support</label>
+				<div class="col-sm-10">
+					<select th:field="*{support}">
+						<option th:value="Pillule" th:text="Pillule"></option>
+						<option th:value="Seringue" th:text="Seringue"></option>
+						<option th:value="Sachet" th:text="Sachet"></option>
+						<option th:value="Gramme" th:text="Gramme"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 col-sm-2 control-label">Patients</label>
+				<div class="col-sm-10">
+					<select name="user" id="user">
+						<div th:each="patient : ${users}">
+							<option th:value="${patient.id}" th:text="${patient.firstname}"></option>
+						</div>
+					</select>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-info col-2"> Save Medicine</button>
+		</form>
+
+
+	</div>
+</body>
+
+</html>

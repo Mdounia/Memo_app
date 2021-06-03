@@ -61,19 +61,19 @@
 				
 				
 							<li class="sub-menu">
-								<a href="patientList" onclick="clickSingleA(this)" class="active">
+								<a href="patientList" onclick="clickSingleA(this)" >
 									<i class="fa fa-cogs"></i>
 									<span> Patients Management</span>
 								</a>
 							</li>
 							<li class="sub-menu">
-								<a href="tasksList" onclick="clickSingleA(this)">
+								<a href="tasksList" onclick="clickSingleA(this)" >
 									<i class="fa fa-cogs"></i>
 									<span> Tasks Management</span>
 								</a>
 							</li>
 							<li class="sub-menu">
-								<a href="medicinesList" onclick="clickSingleA(this)">
+								<a href="medicinesList" onclick="clickSingleA(this)" class="active">
 									<i class="fa fa-cogs"></i>
 									<span> Medicine Management</span>
 								</a>
@@ -101,38 +101,59 @@
 			<!--main content start-->
 			<section id="main-content">
 				<section class="wrapper">
-					<h3><i class="fa fa-angle-right"></i> Add new pateint</h3>
+					<h3><i class="fa fa-angle-right"></i> Add new medicine</h3>
 			
 					<!-- BASIC FORM ELELEMNTS -->
 					<div class="row mt">
 						<div class="col-lg-12">
 							<div class="form-panel">
-								<form class="form-horizontal style-form" action="#" th:action="@{/savePatient}" th:object="${pat}" method="POST">
+								<form class="form-horizontal style-form" action="#" th:action="@{/saveMedicine}" th:object="${med}" method="POST">
 									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">First name</label>
+										<label class="col-sm-2 col-sm-2 control-label">Name</label>
 										<div class="col-sm-10">
-											<input  class="form-control" th:field="*{firstName}" placeholder="First name" required autofocus="autofocus" />
+											<input  class="form-control" th:field="*{name}" placeholder="Name" required autofocus="autofocus" />
+										</div>
+									</div>								
+									<div class="form-group">
+										<label class="col-sm-2 col-sm-2 control-label">Description</label>
+										<div class="col-sm-10">
+											<input  class="form-control" th:field="*{description}" placeholder="Description" required autofocus="autofocus" />
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">Last name</label>
+										<label class="col-sm-2 col-sm-2 control-label">Time</label>
 										<div class="col-sm-10">
-											<input  class="form-control" th:field="*{lastName}" placeholder="First name" required autofocus="autofocus" />
+											<input type="time" class="form-control" th:field="*{time}" placeholder="Time" required autofocus="autofocus" />
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">Email</label>
+										<label class="col-sm-2 col-sm-2 control-label">Dose</label>
 										<div class="col-sm-10">
-											<input type="email" th:field="*{email}" placeholder="Patient email" class="form-control" required>
+											<input type="number" class="form-control" th:field="*{dose}" placeholder="Dose" required autofocus="autofocus" />
 										</div>
-									</div>	
+									</div>
 									<div class="form-group">
-										<label class="col-sm-2 col-sm-2 control-label">Password</label>
+										<label class="col-sm-2 col-sm-2 control-label">Mode d'application'</label>
 										<div class="col-sm-10">
-											<input type="password" th:field="*{password}" placeholder="Patient password" class="form-control"required>
+											<select th:field="*{support}">
+    											<option th:value="Pillule" th:text="Pillule"></option>
+    											<option th:value="Seringue" th:text="Seringue"></option>
+    											<option th:value="Sachet" th:text="Sachet"></option>
+    											<option th:value="Gramme" th:text="Gramme"></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 col-sm-2 control-label">Patients</label>
+										<div class="col-sm-10" >
+											<select   name="user" id="user" >
+												<div  th:each="patient : ${users}">
+												<option th:value="${patient.id}" th:text="${patient.firstname}"></option>
+												</div>
+											</select>
 										</div>
 									</div>												
-									<button type="submit" class="btn btn-info col-2"> Save Patient</button>																	
+									<button type="submit" class="btn btn-info col-2"> Save Medicine</button>																	
 								</form>
 							</div>
 						</div><!-- col-lg-12-->
